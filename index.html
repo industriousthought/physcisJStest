@@ -1,0 +1,208 @@
+<html>
+
+    <head>
+
+        <script src="requirejs/require.js"></script>
+
+    </head>
+
+    <body>
+
+        <script>
+            require.config({
+
+                baseUrl: './',
+
+                // ...
+
+                packages: [
+
+                {
+
+                    name: 'physicsjs',
+
+                    location: 'PhysicsJS/dist',
+
+                    main: 'physicsjs-0.6.0.min'
+
+                }
+
+                ],
+
+                //...
+
+            });
+
+
+
+            require([
+
+                'physicsjs',
+
+                'physicsjs/behaviors/edge-collision-detection',
+
+                'physicsjs/behaviors/body-impulse-response',
+
+                'physicsjs/behaviors/sweep-prune',
+
+                'physicsjs/behaviors/body-collision-detection',
+
+                'physicsjs/behaviors/constant-acceleration',
+
+                'physicsjs/renderers/canvas',
+
+                'physicsjs/bodies/sprite',
+
+                'physicsjs/bodies/rectangle',
+
+                'physicsjs/bodies/convex-polygon',
+
+                'physicsjs/bodies/circle' // will mix into the PhysicsJS library
+
+                ], function( Physics ){
+
+
+                    Physics(function( world ){
+
+                        var renderer = Physics.renderer('canvas', {
+
+                            el: 'viewport', // id of the canvas element
+
+                            width: 500,
+
+                            height: 500
+
+                        });
+
+                        world.add( renderer );
+
+                        var sprite = Physics.body('sprite', {
+                            
+                            x: 10,
+
+                            y: 10,
+
+                            radius: 10,
+
+                            img: 'zombie/zombie'
+
+                        });
+
+                        window.s = sprite;
+                        world.add( sprite );
+
+                        var square = Physics.body('rectangle', {
+
+                            x: 250,
+
+                            y: 250,
+
+                            width: 50,
+
+                            height: 50
+
+                        });
+
+                        world.add( square );
+
+                        world.render();
+
+                        Physics.util.ticker.on(function( time, dt ){
+
+                            world.step( time );
+
+                        });
+
+
+                        // start the ticker
+
+                        Physics.util.ticker.start();
+
+                        world.on('step', function(){
+
+                            world.render();
+
+                        });
+
+                        world.add( Physics.behavior('constant-acceleration') );
+
+                        var bounds = Physics.aabb(0, 0, 500, 500);
+
+                        world.add( Physics.behavior('edge-collision-detection', {
+
+                            aabb: bounds,
+
+                            restitution: 0.3
+
+                        }) );
+
+                        // ensure objects bounce when edge collision is detected
+
+                        world.add( Physics.behavior('body-impulse-response') );
+
+                        world.add( Physics.body('convex-polygon', {
+
+                            x: 250,
+
+                            y: 50,
+
+                            vx: 0.05,
+
+                            vertices: [
+
+                            {x: 0, y: 80},
+
+                            {x: 60, y: 40},
+
+                            {x: 60, y: -40},
+
+                            {x: 0, y: -80}
+
+                            ]
+
+                        }) );
+
+
+
+                        world.add( Physics.body('convex-polygon', {
+
+                            x: 400,
+
+                            y: 200,
+
+                            vx: -0.02,
+
+                            vertices: [
+
+                            {x: 0, y: 80},
+
+                            {x: 80, y: 0},
+
+                            {x: 0, y: -80},
+
+                            {x: -30, y: -30},
+
+                            {x: -30, y: 30}
+
+                            ]
+
+                        }) );
+
+                        world.add( Physics.behavior('body-collision-detection') );
+
+                        world.add( Physics.behavior('sweep-prune') );
+
+                    });
+
+                }
+            );
+
+
+        </script>
+
+        <canvas id="viewport" width="500" height="500"></canvas>
+
+    </body>
+
+</html>
+
