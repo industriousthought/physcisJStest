@@ -77,6 +77,13 @@
                         world.add( renderer );
 
                         var sprite = Physics.body('sprite', {
+
+                            texMap: {
+
+                                x: 6,
+
+                                y: 3
+                            },
                             
                             x: 10,
 
@@ -84,8 +91,11 @@
 
                             radius: 10,
 
-                            img: 'zombie/zombie'
+                            styles: {
+                                
+                                src: 'zombie/zombie.png'
 
+                            }
                         });
 
                         window.s = sprite;
