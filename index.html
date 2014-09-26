@@ -2,7 +2,7 @@
 
     <head>
 
-        <script src="requirejs/require.js"></script>
+        <script src="node_modules/requirejs/require.js"></script>
 
     </head>
 
@@ -21,7 +21,7 @@
 
                     name: 'physicsjs',
 
-                    location: 'PhysicsJS/dist',
+                    location: 'node_modules/PhysicsJS/dist',
 
                     main: 'physicsjs-0.6.0.min'
 
@@ -51,13 +51,14 @@
 
                 'physicsjs/renderers/canvas',
 
+                'physicsjs/bodies/circle', // will mix into the PhysicsJS library
+
                 'physicsjs/bodies/sprite',
 
                 'physicsjs/bodies/rectangle',
 
-                'physicsjs/bodies/convex-polygon',
+                'physicsjs/bodies/convex-polygon'
 
-                'physicsjs/bodies/circle' // will mix into the PhysicsJS library
 
                 ], function( Physics ){
 
