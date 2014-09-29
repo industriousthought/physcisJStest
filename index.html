@@ -41,11 +41,13 @@
 
                 'physicsjs/behaviors/edge-collision-detection',
 
+                'physicsjs/integrators/improved-euler',
+
                 'physicsjs/behaviors/body-impulse-response',
 
                 'physicsjs/behaviors/sweep-prune',
 
-                'physicsjs/behaviors/body-collision-detection',
+                //'physicsjs/behaviors/body-collision-detection',
 
                 'physicsjs/behaviors/constant-acceleration',
 
@@ -62,9 +64,11 @@
 
                 ], function( Physics ){
 
+                    window.p = Physics;
 
                     Physics(function( world ){
 
+                        window.w = world;
                         var renderer = Physics.renderer('canvas', {
 
                             el: 'viewport', // id of the canvas element
@@ -77,6 +81,35 @@
 
                         world.add( renderer );
 
+                        var integrator = Physics.integrator('improved-euler', {
+                            
+                            drag: 1
+                            
+                        });
+
+                        world.add( integrator );
+
+                        /*Physics.body('sprite', 'circle', function( parent ){
+
+                            return {
+
+                                init: function( options ){
+
+                                    parent.init.call(this, options);
+
+                                    this.state.rot = 0;
+
+                                },
+
+
+                                // spin the wheel at desired speed
+                                spin: function( speed ){
+                                    // the wheels are spinning...
+                                    this.state.angular.vel = speed;
+                                }
+                            };
+                        });*/
+                        
                         var sprite = Physics.body('sprite', {
 
                             texMap: {
@@ -135,7 +168,7 @@
 
                         });
 
-                        world.add( Physics.behavior('constant-acceleration') );
+                        //world.add( Physics.behavior('constant-acceleration') );
 
                         var bounds = Physics.aabb(0, 0, 500, 500);
 
@@ -199,9 +232,9 @@
 
                         }) );
 
-                        world.add( Physics.behavior('body-collision-detection') );
+                        //world.add( Physics.behavior('body-collision-detection') );
 
-                        world.add( Physics.behavior('sweep-prune') );
+                        //world.add( Physics.behavior('sweep-prune') );
 
                     });
 
