@@ -21,9 +21,9 @@
 
                     name: 'physicsjs',
 
-                    location: 'node_modules/PhysicsJS/dist',
+                    location: 'node_modules/PhysicsJS_wip/physicsjs',
 
-                    main: 'physicsjs-0.6.0.min'
+                    main: 'physicsjs-full.js'
 
                 }
 
@@ -68,6 +68,39 @@
 
                     Physics(function( world ){
 
+                        var makeSprite = function(img, x, y, radius, tiles) {
+
+                            var sprite = Physics.body('sprite', {
+
+                                texMap: {
+
+                                    x: 6,
+
+                                    y: 3
+                                },
+                                
+                                x: 10,
+
+                                y: 10,
+
+                                radius: 10,
+
+                                styles: {
+                                    
+                                    src: 'zombie/zombie.png'
+
+                                }
+                            });
+
+                            window.s = sprite;
+                            world.add( sprite );
+
+                            world.on('step', function() {
+                                sprite.animate();
+                            });
+
+                        };
+
                         window.w = world;
                         var renderer = Physics.renderer('canvas', {
 
@@ -83,57 +116,12 @@
 
                         var integrator = Physics.integrator('improved-euler', {
                             
-                            drag: 1
+                            drag: .9
                             
                         });
 
                         world.add( integrator );
 
-                        /*Physics.body('sprite', 'circle', function( parent ){
-
-                            return {
-
-                                init: function( options ){
-
-                                    parent.init.call(this, options);
-
-                                    this.state.rot = 0;
-
-                                },
-
-
-                                // spin the wheel at desired speed
-                                spin: function( speed ){
-                                    // the wheels are spinning...
-                                    this.state.angular.vel = speed;
-                                }
-                            };
-                        });*/
-                        
-                        var sprite = Physics.body('sprite', {
-
-                            texMap: {
-
-                                x: 6,
-
-                                y: 3
-                            },
-                            
-                            x: 10,
-
-                            y: 10,
-
-                            radius: 10,
-
-                            styles: {
-                                
-                                src: 'zombie/zombie.png'
-
-                            }
-                        });
-
-                        window.s = sprite;
-                        world.add( sprite );
 
                         var square = Physics.body('rectangle', {
 
@@ -235,6 +223,8 @@
                         //world.add( Physics.behavior('body-collision-detection') );
 
                         //world.add( Physics.behavior('sweep-prune') );
+
+                        makeSprite();
 
                     });
 
