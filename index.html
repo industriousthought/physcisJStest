@@ -64,30 +64,43 @@
 
                 ], function( Physics ){
 
-                    window.p = Physics;
 
                     Physics(function( world ){
 
-                        var makeSprite = function(img, x, y, radius, tiles) {
+                        var makeSprite = function(options) {
 
-                            var sprite = Physics.body('sprite', {
+                            var sprite = Physics.body('sprite', options);
+
+                            world.add( sprite );
+
+                            world.on('step', function() {
+                                sprite.animate();
+                            });
+
+                            return sprite;
+
+                        };
+
+                        var makePlayer = function(options) {
+                        
+                            return makeSprite({
+
+                                radius: 10,
+
+                                x: options.x,
+
+                                y: options.y,
 
                                 texMap: {
 
-                                    x: 6,
+                                    scaler: .5,
 
-                                    y: 3,
+                                    x: [6, 5],
 
-                                    activity: 0,
+                                    y: 2,
 
-                                    frame: 0
+                                    activity: 0
                                 },
-                                
-                                x: 10,
-
-                                y: 10,
-
-                                radius: 10,
 
                                 styles: {
 
@@ -95,17 +108,48 @@
 
                                     height: 420,
                                     
-                                    src: 'zombie/img/zombie1.png'
+                                    src: 'player/img/player.png'
 
-                                }
+
+                                }   
                             });
+                            
 
-                            window.s = sprite;
-                            world.add( sprite );
+                        };
 
-                            world.on('step', function() {
-                                sprite.animate();
+                        var makeZombie = function(options) {
+                        
+                            makeSprite({
+
+                                radius: 10,
+
+                                x: options.x,
+
+                                y: options.y,
+
+                                texMap: {
+
+                                    scaler: .5,
+
+                                    x: [6, 5, 2],
+
+                                    y: 3,
+
+                                    activity: 1
+                                },
+
+                                styles: {
+
+                                    width: 1500,
+
+                                    height: 420,
+                                    
+                                    src: 'zombie/img/zombie' + options.type + '.png'
+
+
+                                }   
                             });
+                            
 
                         };
 
@@ -131,19 +175,7 @@
                         world.add( integrator );
 
 
-                        var square = Physics.body('rectangle', {
 
-                            x: 250,
-
-                            y: 250,
-
-                            width: 50,
-
-                            height: 50
-
-                        });
-
-                        world.add( square );
 
                         world.render();
 
@@ -180,59 +212,23 @@
 
                         world.add( Physics.behavior('body-impulse-response') );
 
-                        world.add( Physics.body('convex-polygon', {
-
-                            x: 250,
-
-                            y: 50,
-
-                            vx: 0.05,
-
-                            vertices: [
-
-                            {x: 0, y: 80},
-
-                            {x: 60, y: 40},
-
-                            {x: 60, y: -40},
-
-                            {x: 0, y: -80}
-
-                            ]
-
-                        }) );
 
 
 
-                        world.add( Physics.body('convex-polygon', {
-
-                            x: 400,
-
-                            y: 200,
-
-                            vx: -0.02,
-
-                            vertices: [
-
-                            {x: 0, y: 80},
-
-                            {x: 80, y: 0},
-
-                            {x: 0, y: -80},
-
-                            {x: -30, y: -30},
-
-                            {x: -30, y: 30}
-
-                            ]
-
-                        }) );
 
                         //world.add( Physics.behavior('body-collision-detection') );
 
                         //world.add( Physics.behavior('sweep-prune') );
 
-                        makeSprite();
+                        makeZombie({x: 90, y: 90, type: 2});
+
+                        var player = makePlayer({x: 150, y: 150});
+
+                
+                        document.addEventListener('keydown', function(event) {
+                            console.log(event.keyCode);
+
+                        }, false);
 
                     });
 
