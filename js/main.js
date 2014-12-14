@@ -57,12 +57,11 @@ require([
 
 
         Physics(function( world ){
+            Utils.setupWorld({init: [Player, Zombies, Utils]}, world, Physics);
 
-            Utils.setupWorld({test: 'test'}, world, Physics);
-
-            Zombies.add({x: 90, y: 90, type: 2}, world, Physics);
-            Player.add({x: 160, y: 160}, world, Physics);
-            console.log(Utils.camera());
+            Zombies.add({x: 90, y: 90, type: 2});
+            var p = Player.add({x: 160, y: 160});
+            Utils.follow(p);
 
     /*
             document.addEventListener('keydown', function(event) {

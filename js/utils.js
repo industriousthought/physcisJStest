@@ -6,22 +6,35 @@ define(
 
     function() {
         
-        var addSprite = function(options, world, Physics) {
+        var world,
+            Physics,
+
+            init = function(w, p) {
+                world = w;
+                Physics = p;
+            },
+
+            addSprite = function(options) {
 
                 var sprite = Physics.body('sprite', options);
+                Physics.util.extend(sprite, Physics.util.pubsub.prototype);
 
                 world.add( sprite );
 
                 world.on('step', function() {
-                    sprite.animate();
+                    sprite.emit('animateSprite');
                 });
 
                 return sprite;
             },
 
             setupWorld = function(options, world, Physics) {
+
+                for (var i = 0; i < options.init.length; i++) {
+                    options.init[i].init(world, Physics);
+                }
                 
-                var renderer = Physics.renderer('canvas', {
+                renderer = Physics.renderer('canvas', {
 
                     el: 'viewport', // id of the canvas element
 
@@ -79,17 +92,28 @@ define(
 
                 world.add( Physics.behavior('body-impulse-response') );
 
-                camera = options.test;
             },
 
-            camera = {};
+            follow = function(o) {
+
+                renderer.layer('main').options.follow = o;
+
+            },
+
+            renderer,
+
+            world,
+
+            Physics;
 
         return {
             addSprite: addSprite,
             
             setupWorld: setupWorld,
 
-            camera: function() { return camera }
+            follow: follow,
+
+            init: init
         };
     }
 );

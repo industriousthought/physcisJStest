@@ -7,7 +7,15 @@ define(
         
         var zombies = [],
             
-            add = function(options, world, Physics) {
+            world,
+            Physics,
+
+            init = function(w, p) {
+                world = w;
+                Physics = p;
+            },
+
+            add = function(options) {
 
                 zombies.push(Utils.addSprite({
 
@@ -40,19 +48,31 @@ define(
                     }
                 }, world, Physics));
                 
-                console.log(zombies);
             },
 
             list = function() {
                 return zombies;
 
-            };
+            },
+
+            kill = function(zombie) {
+                world.remove(zombie);
+                
+            },
+
+            world,
+
+            Physics;
 
 
         return {
             add: add,
 
-            list: list
+            kill: kill,
+
+            list: list,
+
+            init: init
         };
     }
 );

@@ -4,8 +4,16 @@ define(
 
     function(Utils) {
 
-        var add = function(options, world, Physics) {
-                Utils.addSprite({
+        var world,
+            Physics,
+
+            init = function(w, p) {
+                world = w;
+                Physics = p;
+            },
+
+            add = function(options) {
+                return Utils.addSprite({
 
                     radius: 10,
 
@@ -40,7 +48,9 @@ define(
 
 
         return {
-            add: add 
+            add: add,
+
+            init: init
         };
     }
 );
