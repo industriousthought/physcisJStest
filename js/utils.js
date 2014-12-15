@@ -16,7 +16,7 @@ define(
 
             addSprite = function(options) {
 
-                var sprite = Physics.body('sprite', options);
+                window.sprite = Physics.body('sprite', options);
                 Physics.util.extend(sprite, Physics.util.pubsub.prototype);
 
                 world.add( sprite );

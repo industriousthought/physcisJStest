@@ -21,18 +21,19 @@ define(
 
                     y: options.y,
 
-                    texMap: {
-
-                        scaler: .5,
-
-                        x: [6, 5],
-
-                        y: 2,
-
-                        activity: 0
-                    },
-
                     styles: {
+
+                        texMap: {
+
+                            scaler: .5,
+
+                            x: [6, 5],
+
+                            y: 2,
+
+                            activity: 0
+                        },
+
 
                         width: 1500,
 

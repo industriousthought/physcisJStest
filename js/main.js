@@ -61,7 +61,11 @@ require([
 
             Zombies.add({x: 90, y: 90, type: 2});
             var p = Player.add({x: 160, y: 160});
-            Utils.follow(p);
+window.camera = Physics.body('circle');
+
+            Utils.follow(camera);
+camera.state.pos.set(160, 160);
+
 
     /*
             document.addEventListener('keydown', function(event) {
