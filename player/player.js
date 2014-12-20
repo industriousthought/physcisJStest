@@ -25,8 +25,6 @@ define(
 
                         texMap: {
 
-                            scaler: .5,
-
                             x: [6, 5],
 
                             y: 2,

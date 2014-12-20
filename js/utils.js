@@ -6,10 +6,7 @@ define(
 
     function() {
         
-        var world,
-            Physics,
-
-            init = function(w, p) {
+        var init = function(w, p) {
                 world = w;
                 Physics = p;
             },
@@ -38,9 +35,9 @@ define(
 
                     el: 'viewport', // id of the canvas element
 
-                    width: 500,
+                    width: 1000,
 
-                    height: 500
+                    height: 1000
 
                 });
 
@@ -48,7 +45,7 @@ define(
 
                 var integrator = Physics.integrator('improved-euler', {
                     
-                    drag: .9
+                    drag: .5
                     
                 });
 
@@ -76,9 +73,8 @@ define(
 
                 });
 
-                //world.add( Physics.behavior('constant-acceleration') );
 
-                var bounds = Physics.aabb(0, 0, 500, 500);
+                var bounds = Physics.aabb(0, 0, 1000, 1000);
 
                 world.add( Physics.behavior('edge-collision-detection', {
 
@@ -96,7 +92,14 @@ define(
 
             follow = function(o) {
 
-                renderer.layer('main').options.follow = o;
+                var camera = Physics.body('point');
+                renderer.layer('main').options.follow = camera;
+                world.on('step', function() {
+                    camera.state.pos.set(o.state.pos.get(0) - 500, o.state.pos.get(1) - 500);
+                    camera.state.angular.pos = o.state.angular.pos;
+
+                });
+                
 
             },
 

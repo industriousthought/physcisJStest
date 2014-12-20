@@ -44,7 +44,7 @@ require([
 
     //'physicsjs/behaviors/body-collision-detection',
 
-    'physicsjs/behaviors/constant-acceleration',
+    'physicsjs/behaviors/player',
 
     'physicsjs/renderers/canvas',
 
@@ -60,21 +60,12 @@ require([
             Utils.setupWorld({init: [Player, Zombies, Utils]}, world, Physics);
 
             Zombies.add({x: 90, y: 90, type: 2});
-            var p = Player.add({x: 160, y: 160});
-window.camera = Physics.body('circle');
+            window.p = Player.add({x: 160, y: 160});
 
-            Utils.follow(camera);
-camera.state.pos.set(160, 160);
-
-
-    /*
-            document.addEventListener('keydown', function(event) {
-                if (event.keyCode === 39) { player.state.vel.x = 1 }
-                if (event.keyCode === 37) { player.state.vel.x = -1 }
-                console.log(event.keyCode);
-
-            }, false);
-*/
+            Utils.follow(p);
+            var controller = Physics.behavior('player', { player: p })
+            world.add(controller);
+        
         });
 
     }
