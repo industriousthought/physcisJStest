@@ -17,9 +17,9 @@ define(
 
             add = function(options) {
 
-                zombies.push(Utils.addSprite({
+                var sprite = Utils.addSprite({
 
-                    radius: 10,
+                    radius: 100,
 
                     x: options.x,
 
@@ -44,7 +44,20 @@ define(
 
 
                     }
-                }, world, Physics));
+                }, world, Physics);
+
+                sprite.health = 100;
+
+                sprite.hit = function() {
+                    sprite.health -= 25;
+                    if (sprite.health <= 0) {
+                        world.remove(this);
+                    }
+                };
+
+                sprite.name = 'zombie';
+
+                zombies.push(sprite);
                 
             },
 

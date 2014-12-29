@@ -13,9 +13,10 @@ define(
             },
 
             add = function(options) {
-                return Utils.addSprite({
 
-                    radius: 10,
+                sprite = Utils.addSprite({
+
+                    radius: 50,
 
                     x: options.x,
 
@@ -42,6 +43,34 @@ define(
 
                     }   
                 }, world, Physics);
+                
+                sprite.shoot = function() {
+                    var options = { 
+                            x: this.state.pos.get(0) + Math.cos(this.state.angular.pos) * 25,
+                            y: this.state.pos.get(1) + Math.sin(this.state.angular.pos) * 25, 
+                            radius: 25,
+                            mass: 3,
+                            styles: {
+                                src: 'img/bullet'
+                            }
+                        },
+
+                        bullet = Physics.body('circle', options);
+//window.b = bullet;
+ 
+                    world.add(bullet);
+                    bullet.state.angular.pos = this.state.angular.pos;
+                    bullet.name = 'bullet';
+                    bullet.state.acc.set(
+                        Math.cos(this.state.angular.pos) * 1,
+                        Math.sin(this.state.angular.pos) * 1
+                    );
+
+                };
+
+                sprite.name = 'player';
+
+                return sprite;
 
             };
 
