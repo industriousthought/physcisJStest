@@ -13,14 +13,10 @@ define(
 
             addSprite = function(options) {
 
-                window.sprite = Physics.body('sprite', options);
-                Physics.util.extend(sprite, Physics.util.pubsub.prototype);
+                sprite = Physics.body('sprite', options);
 
                 world.add( sprite );
 
-                world.on('step', function() {
-                    sprite.emit('animateSprite');
-                });
 
                 return sprite;
             },
@@ -45,7 +41,7 @@ define(
 
                 var integrator = Physics.integrator('improved-euler', {
                     
-                    drag: .5
+                    drag: 0.1
                     
                 });
 
@@ -84,6 +80,14 @@ define(
 
                 }) );
 
+                world.add( Physics.behavior('sweep-prune', {
+                }));
+
+                world.add( Physics.behavior('body-collision-detection', {
+
+
+                }));
+
                 // ensure objects bounce when edge collision is detected
 
                 world.add( Physics.behavior('body-impulse-response') );
@@ -95,11 +99,44 @@ define(
                 var camera = Physics.body('point');
                 renderer.layer('main').options.follow = camera;
                 world.on('step', function() {
-                    camera.state.pos.set(o.state.pos.get(0) - 500, o.state.pos.get(1) - 500);
-                    camera.state.angular.pos = o.state.angular.pos;
+                    camera.state.pos.set( - (o.state.pos.get(0) + 500), - (o.state.pos.get(1)  + 500));
+                    camera.state.angular.pos = - o.state.angular.pos - Math.PI / 2;
 
                 });
                 
+
+            },
+
+            addBackground = function(options) {
+
+                var x, 
+                y,  
+                i, 
+                j,
+                o;
+
+                options.treatment = 'static';
+                if (!options.x) { options.x = 0; }
+                if (!options.y) { options.y = 0; }
+                x = options.x;
+                y = options.y;
+                options.styles.width = options.width;
+                options.styles.height = options.height;
+
+                if (options.repeat) {
+
+                    for ( i = 0; i < options.repeat.rows; i++ ) {
+                        for ( j = 0; j < options.repeat.columns; j++ ) {
+                            options.x = x + i * options.width; 
+                            options.y = y + j * options.height; 
+                            o = Physics.body('rectangle', options);
+                            o.background = true;
+                    
+                            world.add(o);
+                        }   
+                    }   
+
+                }
 
             },
 
@@ -115,6 +152,8 @@ define(
             setupWorld: setupWorld,
 
             follow: follow,
+            
+            addBackground: addBackground,
 
             init: init
         };
